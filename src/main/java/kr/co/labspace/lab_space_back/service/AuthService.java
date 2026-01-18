@@ -4,15 +4,18 @@ import kr.co.labspace.lab_space_back.dto.LoginRequestDto;
 import kr.co.labspace.lab_space_back.dto.LoginResponseDto;
 import kr.co.labspace.lab_space_back.entity.User;
 import kr.co.labspace.lab_space_back.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 public class AuthService {
     @Autowired
     private UserRepository userRepository;
 
     public LoginResponseDto login(LoginRequestDto loginDto){
+        log.info("이메일 : {} ", loginDto.getEmail());
         // 1. 이메일로 사용자 찾기
         User user = userRepository.findByEmail(loginDto.getEmail())
                 .orElseThrow(() -> new RuntimeException(("사용자를 찾을 수 없습니다.")));
