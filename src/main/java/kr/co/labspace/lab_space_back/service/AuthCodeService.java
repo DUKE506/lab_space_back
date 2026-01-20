@@ -1,7 +1,7 @@
 package kr.co.labspace.lab_space_back.service;
 
 import jakarta.transaction.Transactional;
-import kr.co.labspace.lab_space_back.entity.Authcode;
+import kr.co.labspace.lab_space_back.entity.AuthCode;
 import kr.co.labspace.lab_space_back.repository.AuthCodeRepository;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +23,7 @@ public class AuthCodeService {
     public String generateCode(Long userId) {
         String code = UUID.randomUUID().toString();
 
-        Authcode authcode = Authcode.builder()
+        AuthCode authcode = AuthCode.builder()
                 .code(code)
                 .userId(userId)
                 .expiresAt(LocalDateTime.now().plusMinutes(5))
@@ -37,8 +37,8 @@ public class AuthCodeService {
     /*
     * 코드 검증 및 사용자 ID 반환
     * */
-    public Long validateAdnConsume(String code){
-        Authcode authCode = authCodeRepository.findByCode(code).orElse(null);
+    public Long validateAndConsume(String code){
+        AuthCode authCode = authCodeRepository.findByCode(code).orElse(null);
 
         if(authCode == null){
             return  null; // 없는 경우

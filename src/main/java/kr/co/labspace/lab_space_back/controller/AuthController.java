@@ -4,6 +4,7 @@ package kr.co.labspace.lab_space_back.controller;
 import kr.co.labspace.lab_space_back.dto.LoginRequestDto;
 import kr.co.labspace.lab_space_back.dto.LoginResponseDto;
 import kr.co.labspace.lab_space_back.entity.User;
+import kr.co.labspace.lab_space_back.security.JwtTokenProvider;
 import kr.co.labspace.lab_space_back.service.AuthCodeService;
 import kr.co.labspace.lab_space_back.service.AuthService;
 import kr.co.labspace.lab_space_back.service.UserService;
@@ -22,11 +23,21 @@ import java.util.Map;
 @RequestMapping("/api/auth")
 public class AuthController {
 
+    private final UserService userService;
+    private final AuthService authService;
+    private final AuthCodeService authCodeService;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    @Autowired
-    private UserService userService;
-    private AuthService authService;
-    private AuthCodeService authCodeService;
+    // ✅ 생성자 주입 (Spring 4.3+에서는 @Autowired 생략 가능)
+    public AuthController(UserService userService,
+                          AuthService authService,
+                          AuthCodeService authCodeService,
+                          JwtTokenProvider jwtTokenProvider) {
+        this.userService = userService;
+        this.authService= authService;
+        this.authCodeService = authCodeService;
+        this.jwtTokenProvider = jwtTokenProvider;
+    }
 
 
     @PostMapping("/login")
@@ -56,7 +67,7 @@ public class AuthController {
         }
 
         //코드 검증및 사용자 ID 조회
-        Long userId = authCodeService.validateAdnConsume(code);
+        Long userId = authCodeService.validateAndConsume(code);
 
         if(userId == null){
             return ResponseEntity.status(401).body(Map.of("error","Invalid or expired code"));
@@ -65,7 +76,23 @@ public class AuthController {
         //사용자 조회
         User user = userService.getUserByUserId(userId);
 
-        //토큰생성
+        //JWT 토큰생성
+        String accessToken = jwtTokenProvider.createAccessToken(user);
+        String refreshToken = jwtTokenProvider.createRefreshToken(user);
+
+        return ResponseEntity.ok(Map.of(
+                "accessToken", accessToken,
+                "refreshToken", refreshToken,
+                "tokenType", "Bearer",
+                "expiresIn",3600,
+                "user",Map.of(
+                        "id",user.getId(),
+                        "email", user.getEmail(),
+                        "nickname", user.getNickname(),
+                        "userType", user.getUserType(),
+                        "isProfileCompleted", user.getIsProfileCompleted()
+                )
+        ));
 
 
     }

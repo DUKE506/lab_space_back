@@ -1,7 +1,6 @@
 package kr.co.labspace.lab_space_back.config;
 
 import kr.co.labspace.lab_space_back.handler.OAuth2SuccessHandler;
-import kr.co.labspace.lab_space_back.service.CustomOAuth2UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,11 +18,11 @@ import java.util.Arrays;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    private final CustomOAuth2UserService customOAuth2UserService;
+
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
-    public SecurityConfig(CustomOAuth2UserService customOAuth2UserService, OAuth2SuccessHandler oAuth2SuccessHandler) {
-        this.customOAuth2UserService = customOAuth2UserService;
+    public SecurityConfig(OAuth2SuccessHandler oAuth2SuccessHandler) {
+
         this.oAuth2SuccessHandler= oAuth2SuccessHandler;
     }
 
@@ -43,8 +42,7 @@ public class SecurityConfig {
 
                 // 권한 설정
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()  // 로그인, 회원가입 허용
-                        .requestMatchers("/api/public/**").permitAll()  // 공개 API 허용
+                        .requestMatchers("/", "/oauth2/**", "/login/**", "/api/auth/**").permitAll()
                         .anyRequest().authenticated()  // 나머지는 인증 필요
                 )
                 .oauth2Login(oauth2 -> oauth2

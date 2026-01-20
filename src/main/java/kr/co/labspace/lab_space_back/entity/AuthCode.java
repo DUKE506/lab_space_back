@@ -7,13 +7,13 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "auth_codes")
+@Table(name = "auth_code")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Authcode {
+public class AuthCode {
 
     @Id
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
@@ -35,6 +35,8 @@ public class Authcode {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
@@ -49,4 +51,6 @@ public class Authcode {
     public boolean isValid() {
         return !used && !isExpired();
     }
+
+
 }

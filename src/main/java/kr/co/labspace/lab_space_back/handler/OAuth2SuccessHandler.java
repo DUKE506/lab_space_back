@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import kr.co.labspace.lab_space_back.entity.AuthProvider;
 import kr.co.labspace.lab_space_back.entity.User;
+import kr.co.labspace.lab_space_back.entity.UserType;
 import kr.co.labspace.lab_space_back.repository.UserRepository;
 import kr.co.labspace.lab_space_back.service.AuthCodeService;
 import org.springframework.security.core.Authentication;
@@ -48,10 +49,11 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                     // DB에 없으면 자동으로 새 사용자 생성
                     User newUser = User.builder()
                             .provider(AuthProvider.KAKAO)
+                            .userType(UserType.GUEST)
                             .providerId(kakaoId)
                             .nickname(nickname)
                             .email(email)
-//                            .isProfileCompleted(false)
+                            .isProfileCompleted(false)
                             .build();
                     return userRepository.save(newUser);  // DB에 저장
                 });
@@ -63,7 +65,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String targetUrl = UriComponentsBuilder
                 .fromUriString("http://localhost:3333/auth/loginSuccess")
                 .queryParam("code",authCode)
-                .queryParam("userId",user.getId())
                 .build()
                 .toUriString();
 

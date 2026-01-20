@@ -3,9 +3,12 @@ package kr.co.labspace.lab_space_back.repository;
 import kr.co.labspace.lab_space_back.entity.AuthProvider;
 import kr.co.labspace.lab_space_back.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+
+@Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     // 이메일로 사용자 찾기
     Optional<User> findByEmail(String email);
@@ -15,7 +18,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByEmailAndProvider(AuthProvider provider, String email);
 
-    // ID로 사용자 찾기
-    Optional<User> findByUserId (Long userId);
+//    // ID로 사용자 찾기
+//    Optional<User> findByUserId (Long id);
 
 }
