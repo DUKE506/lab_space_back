@@ -18,6 +18,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByEmailAndProvider(AuthProvider provider, String email);
 
+
+
 //    // ID로 사용자 찾기
 //    Optional<User> findByUserId (Long id);
 
