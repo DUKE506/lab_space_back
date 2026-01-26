@@ -4,7 +4,11 @@ import kr.co.labspace.lab_space_back.entity.Lab;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface LabRepository extends JpaRepository<Lab, Long> {
+import java.util.Optional;
 
+@Repository
+public interface LabRepository extends JpaRepository<Lab,Long> {
+
+    //연구실명으로 조회
+    Optional<Lab> findByName(String name);
 }

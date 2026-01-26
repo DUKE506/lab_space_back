@@ -53,9 +53,7 @@ public class User {
     @Column(nullable = false)
     private Boolean isProfileCompleted = false;
 
-    //교수가 소유한 연구실들
-    @OneToMany(mappedBy = "professor", cascade = CascadeType.ALL)
-    private List<Lab> labs = new ArrayList<>();
+
 
     // 프로필 완성도 확인 -> 완성해야 연구실 생성 할 수 있음
     public boolean canComplete (){
@@ -70,17 +68,7 @@ public class User {
         this.department = department;
     }
 
-    //편의 메서드
-    public void addLab(Lab lab){
-        labs.add(lab);
-        lab.setProfessor(this
-        );
-    }
 
-    public void removeLab(Lab lab){
-        labs.remove(lab);
-        lab.setProfessor(null);
-    }
 
 
 }
