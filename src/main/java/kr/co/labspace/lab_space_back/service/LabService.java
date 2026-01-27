@@ -8,9 +8,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,7 +32,7 @@ public class LabService {
 
 
     public boolean createLab (String name , List<MultipartFile> files){
-      log.info("---------ENTERED LAB SERVICE---------");
+      log.info("----------ENTERED LAB SERVICE----------");
       log.info("Lab Name : " + name);
 
 //      1. 연구실생성
@@ -49,22 +52,46 @@ public class LabService {
       return true;
     }
 
+    //파일 저장 메서드
     private boolean saveFile(MultipartFile file, FileCategory fileCategory){
         // 1.저장할 파일명 생성
         UUID uuid = UUID.randomUUID();
-        LocalDateTime createDateTime = LocalDateTime.now();
-        String fileName = uuid.toString()+"_" + createDateTime.toString();
+        String createDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmssSSSS"));
+        String originalName = file.getOriginalFilename();
+        String fileExtension = originalName.substring(originalName.lastIndexOf("."));
+        String fileName = uuid.toString()+"_" + createDateTime.toString()+fileExtension;
 
-        log.info("---------ENTERED SAVE FILE FUNC---------");
-        log.info("Original FileName : " + file.getOriginalFilename());
+
+        log.info("----------ENTERED SAVE FILE FUNC----------");
+        log.info("Original FileName : " + originalName);
         log.info("FileName : " + fileName);
+        log.info("FileExtension : " + fileExtension);
+
 
         // 2. 이미지 경로
-        // 2-1. image경로가 존재하는가
-//        Path path = Paths.get(BaseFilePath)
+        // 2-1. image/category경로가 존재하는가
+        Path uploadPath = Paths.get(BaseFilePath+"/"+fileCategory);
+        try{
+            if(!Files.exists(uploadPath)){
+                //없으면 생성
+                Files.createDirectories(uploadPath);
+                log.info("Create" + fileCategory + "Folder!");
+            }else {
+                //이미 존재하면 로그만
+                log.info("Already Exist" + fileCategory + "Folder!");
+            }
+        }catch(IOException e){
+            throw new RuntimeException("Create" + fileCategory + "Images Folder Failed...", e);
+        }
 
-        // 2-2. category경로가 존재하는가
-
+        // 3. 파일 저장
+        try{
+            Path savePath = uploadPath.resolve(fileName);
+            file.transferTo(savePath);
+            log.info("File save Success!");
+        }catch (IOException e) {
+            throw new RuntimeException("File Save Failed...",e);
+        }
 
 
 

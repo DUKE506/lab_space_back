@@ -21,7 +21,7 @@ public class FileStorageConfig {
     public void initFile() {
 
         try{
-            log.info("----------File Config----------");
+            log.info("==========File Config==========");
             // Create Image Folder
             Path uploadPath = Paths.get(fileBasePath);
 
@@ -35,7 +35,7 @@ public class FileStorageConfig {
             log.info("Already Exist Images Folder!");
 
         }catch (IOException e){
-            throw new RuntimeException("폴더 초기화 실패", e);
+            throw new RuntimeException("Create Default Images Folder Failed...", e);
         }
 
     }

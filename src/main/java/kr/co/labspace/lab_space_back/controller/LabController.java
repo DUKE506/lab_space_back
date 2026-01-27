@@ -29,15 +29,15 @@ public class LabController {
             @RequestPart("name") String name,
             @RequestPart(value = "files",required = false) List<MultipartFile> files
             ){
-        log.info("=========ENTERED LAB CREATE CONTROLLER=========");
+        log.info("==========ENTERED LAB CREATE CONTROLLER==========");
         log.info("DTO : "+name);
 
         //파일 null-safe 처리
         List<MultipartFile> uploadFiles = Optional.ofNullable(files)
                         .orElse(Collections.emptyList()); // 빈배열 반환
 
-        log.info("Files count : ", uploadFiles.size());
-        uploadFiles.forEach((file) -> log.info("file name : " + file.getOriginalFilename()));
+        log.info("Files count : "+ uploadFiles.size());
+        uploadFiles.forEach((file) -> log.info("File name : " + file.getOriginalFilename()));
 
         boolean res = labService.createLab(name, files);
 

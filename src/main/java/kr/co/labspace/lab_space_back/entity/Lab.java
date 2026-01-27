@@ -18,6 +18,13 @@ public class Lab {
     //연구실명
     private String name;
 
+    //승인상태
+    private ApprovalStatus approvalStatus;
+
+    //검증 파일
+//    private List<File>
+
     //교수
+
 
 }
