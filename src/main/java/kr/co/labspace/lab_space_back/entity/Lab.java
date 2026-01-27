@@ -19,7 +19,7 @@ public class Lab {
     private String name;
 
     //승인상태
-    private ApprovalStatus approvalStatus;
+    private ApprovalStatus approvalStatus = ApprovalStatus.PENDING;
 
     //검증 파일
 //    private List<File>

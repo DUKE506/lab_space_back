@@ -1,8 +1,10 @@
 package kr.co.labspace.lab_space_back.controller;
 
 import kr.co.labspace.lab_space_back.dto.lab.CreateRequestDto;
+import kr.co.labspace.lab_space_back.entity.Lab;
 import kr.co.labspace.lab_space_back.service.LabService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -25,7 +27,7 @@ public class LabController {
     }
 
     @PostMapping("/create")
-    public boolean CreateLab (
+    public ResponseEntity<Lab> CreateLab (
             @RequestPart("name") String name,
             @RequestPart(value = "files",required = false) List<MultipartFile> files
             ){
@@ -39,9 +41,9 @@ public class LabController {
         log.info("Files count : "+ uploadFiles.size());
         uploadFiles.forEach((file) -> log.info("File name : " + file.getOriginalFilename()));
 
-        boolean res = labService.createLab(name, files);
+        Lab res = labService.createLab(name, files);
 
 
-        return true;
+        return ResponseEntity.ok(res);
     }
 }

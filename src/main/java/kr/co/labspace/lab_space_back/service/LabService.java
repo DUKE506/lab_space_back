@@ -1,5 +1,6 @@
 package kr.co.labspace.lab_space_back.service;
 
+import kr.co.labspace.lab_space_back.entity.ApprovalStatus;
 import kr.co.labspace.lab_space_back.entity.FileCategory;
 import kr.co.labspace.lab_space_back.entity.Lab;
 import kr.co.labspace.lab_space_back.repository.LabRepository;
@@ -31,25 +32,28 @@ public class LabService {
     }
 
 
-    public boolean createLab (String name , List<MultipartFile> files){
+    public Lab createLab (String name , List<MultipartFile> files){
       log.info("----------ENTERED LAB SERVICE----------");
       log.info("Lab Name : " + name);
 
 //      1. 연구실생성
         Lab newLab = new Lab();
         newLab.setName(name);
+        newLab.setApprovalStatus(ApprovalStatus.PENDING);
 
-//        Lab lab = labRepository.save(newLab);
+
+        Lab lab = labRepository.save(newLab);
+
 
 //        2. 파일저장
 //        2-1. 파일 저장 폴더 생성
         files.forEach(file -> {
             boolean res = saveFile(file, FileCategory.LAB);
         });
-//        2-2. 파일 저장 경로 지정
 
-//        2-3. 파일 저장 명칭 생성
-      return true;
+
+        log.info("LAB Created Successfully");
+      return lab;
     }
 
     //파일 저장 메서드
