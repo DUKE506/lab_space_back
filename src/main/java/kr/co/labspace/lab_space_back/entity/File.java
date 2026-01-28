@@ -1,9 +1,15 @@
 package kr.co.labspace.lab_space_back.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Table(name = "files")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,5 +25,13 @@ public class File {
     //저장명칭
     private String fileName;
 
+    //파일 크기
+    private Long fileSize;
+
+    //MIME 타입
+    private String contentType;
+
+    //각 참조 Id
+    private Long referenceId; //User id, Project id
 
 }

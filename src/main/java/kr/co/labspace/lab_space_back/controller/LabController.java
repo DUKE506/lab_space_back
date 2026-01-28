@@ -4,11 +4,9 @@ import kr.co.labspace.lab_space_back.dto.lab.CreateRequestDto;
 import kr.co.labspace.lab_space_back.entity.Lab;
 import kr.co.labspace.lab_space_back.service.LabService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collections;
@@ -26,8 +24,17 @@ public class LabController {
         this.labService = labService;
     }
 
+    @GetMapping("/findAll")
+    public ResponseEntity<List<Lab>> getLabs(){
+        log.info("==========승인된 연구실 전체 조회 컨트롤러==========");
+        List<Lab> labs = labService.getLabsByApproved();
+        return ResponseEntity.ok(labs);
+    }
+
+
+
     @PostMapping("/create")
-    public ResponseEntity<Lab> CreateLab (
+    public ResponseEntity<Lab> createLab (
             @RequestPart("name") String name,
             @RequestPart(value = "files",required = false) List<MultipartFile> files
             ){
@@ -46,4 +53,30 @@ public class LabController {
 
         return ResponseEntity.ok(res);
     }
+
+    // ==============관리자==============
+
+    @GetMapping("/admin/findAll")
+    public ResponseEntity<List<Lab>> getAll(){
+        log.info("==========관리자 연구실 전체 조회 컨트롤러==========");
+        List<Lab> labs = labService.getLabs();
+        return ResponseEntity.ok(labs);
+    }
+
+    @PatchMapping("/admin/approve/{id}")
+    public ResponseEntity<Lab> approveLab(@PathVariable Long id){
+        return labService.approveLab(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PatchMapping("/admin/reject/{id}")
+    public ResponseEntity<Lab> rejectLab(@PathVariable Long id){
+        return labService.rejectLab(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+
+
 }

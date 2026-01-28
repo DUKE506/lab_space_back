@@ -1,14 +1,18 @@
 package kr.co.labspace.lab_space_back.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+
+import java.util.List;
 
 
 @Entity
 @Table(name = "labs")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Lab {
     //id
     @Id
@@ -21,8 +25,7 @@ public class Lab {
     //승인상태
     private ApprovalStatus approvalStatus = ApprovalStatus.PENDING;
 
-    //검증 파일
-//    private List<File>
+
 
     //교수
 
