@@ -2,10 +2,12 @@ package kr.co.labspace.lab_space_back.controller;
 
 import kr.co.labspace.lab_space_back.dto.lab.CreateRequestDto;
 import kr.co.labspace.lab_space_back.entity.Lab;
+import kr.co.labspace.lab_space_back.entity.User;
 import kr.co.labspace.lab_space_back.service.LabService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,10 +38,11 @@ public class LabController {
     @PostMapping("/create")
     public ResponseEntity<Lab> createLab (
             @RequestPart("name") String name,
-            @RequestPart(value = "files",required = false) List<MultipartFile> files
+            @RequestPart(value = "files",required = false) List<MultipartFile> files,
+            @AuthenticationPrincipal User requestUser
             ){
         log.info("==========ENTERED LAB CREATE CONTROLLER==========");
-        log.info("DTO : "+name);
+        log.info("요청자 : "+ requestUser.toString());
 
         //파일 null-safe 처리
         List<MultipartFile> uploadFiles = Optional.ofNullable(files)
@@ -48,7 +51,7 @@ public class LabController {
         log.info("Files count : "+ uploadFiles.size());
         uploadFiles.forEach((file) -> log.info("File name : " + file.getOriginalFilename()));
 
-        Lab res = labService.createLab(name, files);
+        Lab res = labService.createLab(name, files, requestUser);
 
 
         return ResponseEntity.ok(res);

@@ -6,6 +6,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
 
+import jakarta.servlet.http.HttpServletRequest;
 import kr.co.labspace.lab_space_back.entity.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -79,6 +80,20 @@ public class JwtTokenProvider {
     public String getUserEmailFromToken(String token){
         Claims claims = parseClaims(token);
         return claims.get("email",String.class);
+    }
+
+
+    /**
+     * accessToken리턴
+     * @param request
+     * @return
+     */
+    public String resolveToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+        return null;
     }
 
     /**

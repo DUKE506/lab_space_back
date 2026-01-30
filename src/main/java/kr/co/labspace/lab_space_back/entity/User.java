@@ -1,5 +1,6 @@
 package kr.co.labspace.lab_space_back.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,7 +15,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User {
+@ToString(exclude = {"password", "labMembers"})
+public class User extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -52,6 +54,13 @@ public class User {
 
     @Column(nullable = false)
     private Boolean isProfileCompleted = false;
+
+    //연구실
+    @OneToMany(cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<LabMember> labMembers;
+
+
 
 
 

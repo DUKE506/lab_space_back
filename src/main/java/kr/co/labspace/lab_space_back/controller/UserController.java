@@ -20,6 +20,14 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+    @GetMapping("/myprofile")
+    public void findMyProfile (){
+
+    }
+
+    /*
+    * 사용자 추가정보 입력 컨트롤러
+    * */
     @PostMapping("/register")
     public ResponseEntity<User> additionalUser(@RequestBody AdditionalUserDto additionalUserDto) {
         User user = userService.registerAdditionalProfile(additionalUserDto);

@@ -1,7 +1,9 @@
 package kr.co.labspace.lab_space_back.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 
 import java.util.List;
 
@@ -13,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Lab {
+public class Lab extends BaseEntity{
     //id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,8 +28,10 @@ public class Lab {
     private ApprovalStatus approvalStatus = ApprovalStatus.PENDING;
 
 
-
-    //교수
+    //멤버
+    @OneToMany(mappedBy = "lab",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<LabMember> labMembers;
 
 
 }

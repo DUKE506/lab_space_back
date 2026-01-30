@@ -51,6 +51,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                             .provider(AuthProvider.KAKAO)
                             .userType(UserType.GUEST)
                             .providerId(kakaoId)
+                            .name(nickname)
                             .nickname(nickname)
                             .email(email)
                             .isProfileCompleted(false)
