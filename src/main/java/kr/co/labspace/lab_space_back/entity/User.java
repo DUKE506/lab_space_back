@@ -56,12 +56,9 @@ public class User extends BaseEntity{
     private Boolean isProfileCompleted = false;
 
     //연구실
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<LabMember> labMembers;
-
-
-
 
 
     // 프로필 완성도 확인 -> 완성해야 연구실 생성 할 수 있음
