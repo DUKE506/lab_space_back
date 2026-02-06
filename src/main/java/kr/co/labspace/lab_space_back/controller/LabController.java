@@ -1,8 +1,10 @@
 package kr.co.labspace.lab_space_back.controller;
 
 import kr.co.labspace.lab_space_back.dto.lab.CreateRequestDto;
+import kr.co.labspace.lab_space_back.dto.lab_member.LabMemberDto;
 import kr.co.labspace.lab_space_back.entity.Lab;
 import kr.co.labspace.lab_space_back.entity.User;
+import kr.co.labspace.lab_space_back.service.LabMemberService;
 import kr.co.labspace.lab_space_back.service.LabService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.Response;
@@ -21,9 +23,11 @@ import java.util.Optional;
 public class LabController {
     //서비스 의존성 주입
     private final LabService labService;
+    private final LabMemberService labMemberService;
 
-    public  LabController(LabService labService){
+    public  LabController(LabService labService,LabMemberService labMemberService){
         this.labService = labService;
+        this.labMemberService = labMemberService;
     }
 
     @GetMapping("/findAll")
@@ -57,6 +61,11 @@ public class LabController {
         return ResponseEntity.ok(res);
     }
 
+    @GetMapping("/members/{labId}")
+    public ResponseEntity<List<LabMemberDto>> findLabMembers (@PathVariable("labId") Long labId){
+        return ResponseEntity.ok(labMemberService.findAllLabMembersByLab(labId));
+    }
+
     // ==============관리자==============
 
     @GetMapping("/admin/findAll")
@@ -79,6 +88,9 @@ public class LabController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+
+
 
 
 
