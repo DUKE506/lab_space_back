@@ -3,6 +3,8 @@ package kr.co.labspace.lab_space_back.controller;
 
 import kr.co.labspace.lab_space_back.dto.LoginRequestDto;
 import kr.co.labspace.lab_space_back.dto.LoginResponseDto;
+import kr.co.labspace.lab_space_back.dto.SignUpRequestDto;
+import kr.co.labspace.lab_space_back.dto.user.SignUpResponseDto;
 import kr.co.labspace.lab_space_back.entity.User;
 import kr.co.labspace.lab_space_back.security.JwtTokenProvider;
 import kr.co.labspace.lab_space_back.service.AuthCodeService;
@@ -57,6 +59,19 @@ public class AuthController {
 
     }
 
+    @PostMapping("/signup")
+    public ResponseEntity<SignUpResponseDto> signup(@RequestBody SignUpRequestDto signUpRequestDto){
+        log.info("==========회원가입 컨트롤러==========");
+        log.info("받은 데이터: {}", signUpRequestDto);
+
+        SignUpResponseDto user = authService.signUp(signUpRequestDto);
+
+        return ResponseEntity.ok(user);
+    }
+
+    /*
+    * 카카오 로그인 후 받은 코드를 token으로 교환해주는 api
+    * */
     @PostMapping("/token")
     public ResponseEntity<?> exchangeToken(@RequestBody Map<String,String> request){
         String code = request.get("code");

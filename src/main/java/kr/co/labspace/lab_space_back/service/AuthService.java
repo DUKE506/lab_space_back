@@ -2,6 +2,9 @@ package kr.co.labspace.lab_space_back.service;
 
 import kr.co.labspace.lab_space_back.dto.LoginRequestDto;
 import kr.co.labspace.lab_space_back.dto.LoginResponseDto;
+import kr.co.labspace.lab_space_back.dto.SignUpRequestDto;
+import kr.co.labspace.lab_space_back.dto.UserDto;
+import kr.co.labspace.lab_space_back.dto.user.SignUpResponseDto;
 import kr.co.labspace.lab_space_back.entity.User;
 import kr.co.labspace.lab_space_back.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -29,5 +32,28 @@ public class AuthService {
         String token = "temporary-token-" + user.getId();
 
         return new LoginResponseDto(token, user.getEmail(), user.getName());
+    }
+
+
+    public SignUpResponseDto signUp(SignUpRequestDto signUpRequestDto){
+        User user = User.builder()
+                .name(signUpRequestDto.getName())
+                .nickname(signUpRequestDto.getName())
+                .email(signUpRequestDto.getEmail())
+                .password(signUpRequestDto.getPassword())
+                .university(signUpRequestDto.getUniversity())
+                .department(signUpRequestDto.getDepartment())
+                .userType(signUpRequestDto.getUserType())
+                .isProfileCompleted(true)
+                .build();
+
+        User savedUser = userRepository.save(user);
+
+
+        return SignUpResponseDto.builder()
+                .user(UserDto.from(savedUser))
+                .accessToken("asdadasd")
+                .build();
+
     }
 }
