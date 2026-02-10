@@ -31,6 +31,7 @@ public class SecurityConfig {
         this.jwtAuthenticationFilter=jwtAuthenticationFilter;
     }
 
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -56,7 +57,6 @@ public class SecurityConfig {
                         .anyRequest().authenticated()  // 나머지는 인증 필요
                 )
                 .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/oauth2/authorization/kakao")
                         .successHandler(oAuth2SuccessHandler)
                         .failureUrl("http://localhost:3333/auth/loginFailure")
                 );
@@ -72,7 +72,8 @@ public class SecurityConfig {
         // 허용할 출처
         configuration.setAllowedOrigins(Arrays.asList(
                 "http://localhost:3333",
-                "http://14.35.73.22:3333"
+                "http://14.35.73.22:3333",
+                "http://123.2.156.229:3333"
         ));
 
         // 허용할 HTTP 메서드
@@ -98,7 +99,7 @@ public class SecurityConfig {
         return source;
     }
 
-    @Bean
+    @Bean //패스워드 암호화해주는 객체
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }

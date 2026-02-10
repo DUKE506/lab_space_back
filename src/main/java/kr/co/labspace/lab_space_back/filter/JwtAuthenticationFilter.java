@@ -91,6 +91,8 @@ public class JwtAuthenticationFilter  extends OncePerRequestFilter {
             //거부
             log.info("인증되지않은 사용자 요청!");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json;charset=UTF-8");
+            response.getWriter().write("{\"message\": \"인증되지 않은 사용자입니다.\"}");
             return;
         }
         filterChain.doFilter(request,response);

@@ -16,6 +16,7 @@ public class UserDto {
     private String university;
     private String department;
     private UserType userType;
+    private Boolean isProfileCompleted;
     // password 제외!
 
     public static UserDto from(User user) {
@@ -27,6 +28,7 @@ public class UserDto {
                 .university(user.getUniversity())
                 .department(user.getDepartment())
                 .userType(user.getUserType())
+                .isProfileCompleted(user.getIsProfileCompleted())
                 .build();
     }
 }

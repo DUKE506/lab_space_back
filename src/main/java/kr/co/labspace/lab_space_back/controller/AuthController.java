@@ -12,6 +12,7 @@ import kr.co.labspace.lab_space_back.service.AuthService;
 import kr.co.labspace.lab_space_back.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,29 +45,21 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDto loginDto){
-//        log.info("========== 로그인 요청 시작 ==========");
-//        log.info("받은 데이터: {}", loginDto);
-//        log.info("이메일: {}", loginDto.getEmail());
-//        log.info("비밀번호: {}", loginDto.getPassword());
-//        log.info("비밀번호 길이: {}", loginDto.getPassword().length());
-//        log.info("====================================");
-        try{
-            LoginResponseDto responseDto = authService.login(loginDto);
-            return ResponseEntity.ok(responseDto);
-        }catch (RuntimeException e){
-            return ResponseEntity.badRequest().build();
-        }
+        log.info("========== 로그인 요청 시작 ==========");
+        log.info("받은 데이터: {}", loginDto);
+        LoginResponseDto responseDto = authService.login(loginDto);
+        return ResponseEntity.ok(responseDto);
 
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<SignUpResponseDto> signup(@RequestBody SignUpRequestDto signUpRequestDto){
+    public ResponseEntity<Void> signup(@RequestBody SignUpRequestDto signUpRequestDto){
         log.info("==========회원가입 컨트롤러==========");
         log.info("받은 데이터: {}", signUpRequestDto);
 
-        SignUpResponseDto user = authService.signUp(signUpRequestDto);
+        authService.signUp(signUpRequestDto);
 
-        return ResponseEntity.ok(user);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     /*
