@@ -45,9 +45,13 @@ public class LabService {
 
     //관리자 연구실 승인
     public Optional<Lab> approveLab(Long id){
+
+        //연구실 코드 생성
+
         return labRepository.findById(id)
                 .map(lab -> {
                     lab.setApprovalStatus(ApprovalStatus.APPROVED);
+                    lab.setIsRecruiting(true);
                     lab.getLabMembers().forEach(member -> member.setApprovalStatus(ApprovalStatus.APPROVED));
                     return labRepository.save(lab);
                 });
@@ -84,6 +88,7 @@ public class LabService {
         Lab newLab = Lab.builder()
                 .name(name)
                 .approvalStatus(ApprovalStatus.PENDING)
+                .isRecruiting(false)
                 .build();
         Lab savedLab = labRepository.save(newLab);
 

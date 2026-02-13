@@ -27,6 +27,12 @@ public class Lab extends BaseEntity{
     //승인상태
     private ApprovalStatus approvalStatus = ApprovalStatus.PENDING;
 
+    //가입 코드
+    private String code;
+
+    //모집여부
+    private Boolean isRecruiting;
+
 
     //멤버
     @OneToMany(mappedBy = "lab",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
